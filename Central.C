@@ -5,12 +5,13 @@
 #include "TLegend.h"
 #include "TRandom3.h"
 #include "TH1.h"
+#include "TFile.h"
 /*
 To compile:
 .L Central.C++
 
 To execute:
-.x Central.C
+Central();
 
 */
 
@@ -25,6 +26,9 @@ void Central()
 	TF1 *pdf = new TF1("pdf","TMath::Landau(x,[0],[1],0)",0,20);
 	//Setting the parameters for the Landau function (most prbable value, not well defined sigma)
 	pdf->SetParameters(5.,1.0);
+
+
+	//Try it with a unifrom distribution
 
 
 	Double_t N=1000000; //number of avarages
@@ -49,13 +53,22 @@ void Central()
 		hist -> Fill(avg);
 	}
 
+	
+
 	TCanvas *c1 = new TCanvas("c1", "Central Limit", 5,5,800,600);
 	hist->Draw();
 	hist->Fit("gaus");
-	c1->SaveAs("/Users/absonner/work/FlowEx/CLT/figs/clt.pdf");
+	TF1 *myfit = hist -> GetFunction("gaus");
+	c1->SaveAs("figs/clt.pdf");
+	TFile *fout= new TFile("outfile.root", "recreate");
+	fout -> cd();
+	hist -> Write();
+	pdf  -> Write();
+	myfit-> Write();
+	fout -> Close();
 
-	TCanvas *c2 = new TCanvas("c2", "Landau Function", 5,5,800,600);
+	/*TCanvas *c2 = new TCanvas("c2", "Landau Function", 5,5,800,600);
 	pdf->Draw();
-	c2->SaveAs("/Users/absonner/work/FlowEx/CLT/figs/landau.pdf");
-
+	c2->SaveAs("figs/landau.pdf");
+*/
 }
