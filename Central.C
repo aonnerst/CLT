@@ -50,7 +50,7 @@ void CentralLimit (TF1 *fpdf, TString outfilename,int ican)
 	gRandom = new TRandom3();
 
 	Double_t Nevt=1000000; //number of avarages
-	Double_t Npdf=20; // sample size
+	Double_t Npdf=100; // sample size
 
 
 	//Creating the histogram
